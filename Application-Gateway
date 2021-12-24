@@ -1,0 +1,50 @@
+################################ Application Gateway ##################
+
+
+######## Create Resource Group ###########
+az group create -l westus -n AzureAG-RG
+
+
+############## Create VNET and Subnet ################
+az network vnet create -g AzureAG-RG --location eastus -n AzureAG-RG-Vnet1 --address-prefix 10.10.0.0/16 \
+--subnet-name AzureAG-RG-subnet1  --subnet-prefix 10.10.1.0/24
+
+
+############## Create subnets ########################
+az network vnet subnet create -g AzureAG-RG --vnet-name AzureAG-RG-Vnet1 -n AzureAG-RG-subnet-2 --address-prefixes 10.10.2.0/24
+
+az network vnet subnet create -g AzureAG-RG --vnet-name AzureAG-RG-Vnet1 -n AzureAG-RG-subnet-3 --address-prefixes 10.10.3.0/24
+
+
+############## Create NSG & Rules ########################
+az network nsg create -g AzureAG-RG --location eastus -n Azure-RG-NSG
+
+az network nsg rule create -g AzureAG-RG  --nsg-name Azure-RG-NSG  -n Azure-RG-NSG_rule1 --priority 100 \
+--source-address-prefixes '*' --source-port-ranges '*' --destination-address-prefixes '*' \
+--destination-port-ranges '*' --access Allow --protocol Tcp --description "Allowing All Traffic  for now" 
+
+
+############# Create Availability Sets ################
+
+az vm availability-set create --name eastavset1 -g AzureAG-RG --location eastus \
+--platform-fault-domain-count 3 --platform-update-domain-count 5
+
+az vm availability-set create --name eastavset2 -g AzureAG-RG --location eastus \
+--platform-fault-domain-count 3 --platform-update-domain-count 5
+
+az vm availability-set create --name eastavset3 -g AzureAG-RG --location eastus \
+--platform-fault-domain-count 3 --platform-update-domain-count 5
+
+###############Create Virtual Machines ######################
+
+az vm create --resource-group AzureAG-RG --name testvm-01 --image UbuntuLTS --vnet-name AzureAG-RG-Vnet1 --subnet AzureAG-RG-subnet1 \
+--admin-username cloudfreak --admin-password "Zoom@12345678" --size Standard_B1s --availability-set eastavset1 --nsg Azure-RG-NSG -l eastus
+
+az vm create --resource-group AzureAG-RG --name testvm-02 --image UbuntuLTS --vnet-name AzureAG-RG-Vnet1 --subnet AzureAG-RG-subnet-2 \
+--admin-username cloudfreak --admin-password "Zoom@12345678" --size Standard_B1s --availability-set eastavset2 --nsg Azure-RG-NSG -l eastus
+
+az vm create --resource-group AzureAG-RG --name testvm-03 --image UbuntuLTS --vnet-name AzureAG-RG-Vnet1 --subnet AzureAG-RG-subnet-3 \
+--admin-username cloudfreak --admin-password "Zoom@12345678" --size Standard_B1s --availability-set eastavset3 --nsg Azure-RG-NSG -l eastus
+
+
+
