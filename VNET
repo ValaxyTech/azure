@@ -1,0 +1,27 @@
+######### Create Resource Group ############
+az group create -l westus -n AzureRG1
+
+
+
+###### Create VNET & Subnets #################
+az network vnet create -g AzureRG1 -n AzureRG1-vNET1 --address-prefix 10.2.0.0/16 --subnet-name AzureRG1-subnet1 --subnet-prefix 10.2.1.0/24 -l westus
+
+az network vnet subnet create -g AzureRG1 --vnet-name AzureRG1-vNET1 -n AzureRG1-subnet-2 --address-prefixes 10.2.2.0/24
+az network vnet subnet create -g AzureRG1 --vnet-name AzureRG1-vNET1 -n AzureRG1-subnet-3 --address-prefixes 10.2.3.0/24 
+
+
+################## Create Network Security Groups ################################################ Create Network Security Groups ##############################
+az network nsg create -g host_nsg -n <RGNAME>
+
+az network nsg rule create -g <RGNAME> --nsg-name host_nsg -n <rulename> --priority 100 \
+--source-address-prefixes '*' --source-port-ranges '*' --destination-address-prefixes '*' \
+--destination-port-ranges '*' --access Allow --protocol Tcp --description "Allowing All Traffic  for now"
+
+
+###########Linux Virtual Machine###########################
+az vm create --resource-group AzureRG1 --name WebserverVM1 --image UbuntuLTS --vnet-name AzureRG1-vNET1 \
+--subnet AzureRG1-subnet1 --admin-username cloudfreak --admin-password "Zoom@12345678" --size Standard_B1s \
+
+
+az vm create --resource-group AzureRG1 --name LinuxTestVM2 --image UbuntuLTS --vnet-name AzureRG1-vNET1 \
+--subnet AzureRG1-subnet-2 --admin-username cloudfreak --admin-password "Zoom@12345678" --size Standard_B1s
