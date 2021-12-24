@@ -1,0 +1,23 @@
+################## VNET Gateway ###########################
+az group create -l eastus -n main-RG
+
+az group create -l eastus -n spoke-RG
+
+az group create -l eastus -n spoke1-RG
+az network vnet create -g main-RG --location eastus -n mainRG-Vnet1 --address-prefix 10.10.0.0/16 \
+--subnet-name mainRG-subnet1  --subnet-prefix 10.10.1.0/24
+
+az network vnet create -g spoke-RG --location eastus -n spokeRG-Vnet1 --address-prefix 172.16.0.0/16 \
+--subnet-name spokeRG-subnet1  --subnet-prefix 172.16.1.0/24
+
+az network vnet create -g spoke1-RG --location eastus -n spokeRG1-Vnet1 --address-prefix 172.17.0.0/16 \
+--subnet-name spokeRG1-subnet1  --subnet-prefix 172.17.1.0/24
+
+az network nsg create -g spoke-RG --location eastus -n spokeRG-NSG
+
+az network nsg rule create -g spoke-RG  --nsg-name spokeRG-NSG  -n spokeRG-NSG_rule1 --priority 100 \
+--source-address-prefixes '*' --source-port-ranges '*' --destination-address-prefixes '*' \
+--destination-port-ranges '*' --access Allow --protocol Tcp --description "Allowing All Traffic  for now"
+
+az vm create --resource-group spoke1-RG --name testvm1-01 --image UbuntuLTS --vnet-name spokeRG1-Vnet1 --subnet spokeRG1-subnet1 \
+--admin-username cloudfreak --admin-password "Zoom@12345678" --size Standard_B1s --nsg spokeRG-NSG -l eastus
