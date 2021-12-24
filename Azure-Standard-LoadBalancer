@@ -1,0 +1,51 @@
+
+az group create -l eastus -n AzureRG1
+
+
+az network vnet create -g AzureRG1 -n AzureRG1-vNET1 --address-prefix 10.2.0.0/16 --subnet-name AzureRG1-subnet1 --subnet-prefix 10.2.1.0/24 -l eastus
+
+az network vnet subnet create -g AzureRG1 --vnet-name AzureRG1-vNET1 -n AzureRG1-subnet-2 --address-prefixes 10.2.2.0/24
+az network vnet subnet create -g AzureRG1 --vnet-name AzureRG1-vNET1 -n AzureRG1-subnet-3 --address-prefixes 10.2.3.0/24 
+
+
+
+az network nsg create -n host_nsg -g AzureRG1 -l eastus
+
+az network nsg rule create -g AzureRG1 eastus --nsg-name host_nsg -n tes --priority 100 \
+--source-address-prefixes '*' --source-port-ranges '*' --destination-address-prefixes '*' \
+--destination-port-ranges '*' --access Allow --protocol Tcp --description "Allowing All Traffic  for now"
+
+######################## Creating AZ Set #############################
+
+az vm availability-set create --name EAST-AVSET1 -g AzureRG1 --location eastus --platform-fault-domain-count 3 --platform-update-domain-count 5
+
+#################### Creating public ip #############################
+
+az network public-ip create --name Azurepubip -g AzureRG1 --location eastus --sku Standard --allocation-method Static 
+
+az network public-ip create --name Azurepubip2 -g AzureRG1 --location eastus --sku Standard --allocation-method Static
+
+az network public-ip create --name Azurepubip3 -g AzureRG1 --location eastus --sku Standard --allocation-method Static
+
+
+az network public-ip create --name Azurepubip4 -g AzureRG1 --location eastus --sku Standard --allocation-method Static
+#################### Creating VMs ######################################
+
+az vm create --resource-group AzureRG1 -l eastus --name LinuxTestVM1 --image UbuntuLTS --vnet-name AzureRG1-vNET1 \
+--subnet AzureRG1-subnet1 --admin-username cloudfreak --admin-password "Zoom@12345678" --size Standard_B1s \
+--availability-set EAST-AVSET1 --nsg host_nsg -l eastus --public-ip-address Azurepubip
+
+
+az vm create --resource-group AzureRG1 -l eastus --name LinuxTestVM2 --image UbuntuLTS --vnet-name AzureRG1-vNET1 \
+--subnet AzureRG1-subnet-2 --admin-username cloudfreak --admin-password "Zoom@12345678" --size Standard_B1s \
+--availability-set EAST-AVSET1 --nsg host_nsg --public-ip-address Azurepubip2
+
+az vm create --resource-group AzureRG1 -l eastus --name LinuxTestVM3 --image UbuntuLTS --vnet-name AzureRG1-vNET1 \
+--subnet AzureRG1-subnet-3 --admin-username cloudfreak --admin-password "Zoom@12345678" --size Standard_B1s \
+--availability-set EAST-AVSET1 --nsg host_nsg --public-ip-address Azurepubip3
+
+
+
+az vm create --resource-group AzureRG1 -l eastus --name LinuxTestVM4 --image UbuntuLTS --vnet-name AzureRG1-vNET1 \
+--subnet AzureRG1-subnet-2 --admin-username cloudfreak --admin-password "Zoom@12345678" --size Standard_B1s \
+--availability-set EAST-AVSET1 --nsg host_nsg --public-ip-address Azurepubip4
