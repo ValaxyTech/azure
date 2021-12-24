@@ -1,0 +1,11 @@
+az group create -l westus -n AzureTraffic-DNS
+
+az network vnet create -g AzureTraffic-DNS --location eastus -n EASTUS-RG-vNET1 --address-prefix 10.10.0.0/16 --subnet-name EASTUS-RG-subnet1 --subnet-prefix 10.10.1.0/24
+az network vnet create -g AzureTraffic-DNS --location westus -n WESTUS-01-vNET1 --address-prefix 172.16.0.0/16 --subnet-name WESTUS-01-subnet1 --subnet-prefix 172.16.1.0/24
+
+
+az vm create --resource-group AzureTraffic-DNS --location eastus --name EASTUS-VM1 --image UbuntuLTS --vnet-name EASTUS-RG-vNET1 \
+--subnet EASTUS-RG-subnet1 --admin-username cloudfreak --admin-password "Zoom@12345678" --size Standard_B1s
+
+az vm create --resource-group AzureTraffic-DNS --location westus --name WESTUS-VM1 --image UbuntuLTS --vnet-name WESTUS-01-vNET1 \
+--subnet WESTUS-01-subnet1 --admin-username cloudfreak --admin-password "Zoom@12345678" --size Standard_B1s 
