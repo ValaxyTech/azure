@@ -1,0 +1,32 @@
+echo "Creating Resource groups & Vnets"
+az group create -l westus -n Red-RG
+
+az network vnet create -g Red-RG -n Red-RG-vNET1 --address-prefix 10.1.0.0/16 \
+--subnet-name Red-RG-subnet1 --subnet-prefix 10.1.1.0/24 -l westus
+
+az group create -l westus -n Orange-RG
+
+az network vnet create -g Orange-RG -n Orange-RG-vNET1 --address-prefix 172.16.0.0/16 \
+--subnet-name Orange-RG-subnet1 --subnet-prefix 172.16.1.0/24 -l westus
+
+az group create -l eastus -n Blue-RG
+
+az network vnet create -g Blue-RG -n Blue-RG-vNET1 --address-prefix 192.168.0.0/16 \
+--subnet-name Blue-RG-subnet1 --subnet-prefix 192.168.1.0/24 -l eastus
+
+
+
+#########VM Creation ########################
+
+az vm create --resource-group Red-RG --name RedRG-VM --image UbuntuLTS --vnet-name Red-RG-vNET1 \
+--subnet Red-RG-subnet1 --admin-username cloudfreak --admin-password "Zoom@12345678" --size Standard_B1s
+
+az vm create --resource-group Orange-RG --name OrangeRG-VM --image UbuntuLTS --vnet-name Orange-RG-vNET1 \
+--subnet Orange-RG-subnet1 --admin-username cloudfreak --admin-password "Zoom@12345678" --size Standard_B1s
+
+az vm create --resource-group Blue-RG --name BlueRG-VM --image UbuntuLTS --vnet-name Blue-RG-vNET1 \
+--subnet Blue-RG-subnet1 --admin-username cloudfreak --admin-password "Zoom@12345678" --size Standard_B1s
+
+
+########### Set subscription ######################
+az account set --subscription <subscription-name>
