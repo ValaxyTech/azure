@@ -1,3 +1,4 @@
+####################################################################
 az group create -l westus -n AzureTraffic-DNS
 
 az network vnet create -g AzureTraffic-DNS --location eastus -n EASTUS-RG-vNET1 --address-prefix 10.10.0.0/16 --subnet-name EASTUS-RG-subnet1 --subnet-prefix 10.10.1.0/24
