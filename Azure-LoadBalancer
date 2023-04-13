@@ -39,3 +39,4 @@ az vm create --resource-group AzureRG1 -l eastus --name LinuxTestVM3 --image Ubu
 --availability-set EAST-AVSET1 --nsg host_nsg 
 
 
+##########################################################################################################################
