@@ -1,3 +1,4 @@
+############################################################################################################
 az group create -l westus -n hub-RG
 
 az network vnet create -g hub-RG --location eastus -n hubRG-Vnet1 --address-prefix 10.10.0.0/16 \
