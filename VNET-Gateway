@@ -1,4 +1,4 @@
-################## VNET Gateway ###########################
+############################ VNET Gateway #############################################
 az group create -l eastus -n main-RG
 
 az group create -l eastus -n spoke-RG
