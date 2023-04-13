@@ -48,3 +48,4 @@ az vm create --resource-group Proj-01 --name Proj-01-VM1 --image UbuntuLTS --vne
 az vm create --resource-group Proj-02 --name Proj-02-VM1 --image UbuntuLTS --vnet-name Proj-02-vNET1 \
 --subnet Proj-02-subnet1 --admin-username cloudfreak --admin-password "Zoom@12345678" --size Standard_B1s --nsg Proj-02-NSG
 
+###############################################################################################################################
