@@ -47,4 +47,4 @@ az vm create --resource-group AzureAG-RG --name testvm-03 --image UbuntuLTS --vn
 --admin-username cloudfreak --admin-password "Zoom@12345678" --size Standard_B1s --availability-set eastavset3 --nsg Azure-RG-NSG -l eastus
 
 
-
+###########################################################################################################################################
