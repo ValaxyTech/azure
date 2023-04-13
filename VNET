@@ -1,4 +1,4 @@
-######### Create Resource Group ############
+######### Create Resource Group ###################
 az group create -l westus -n AzureRG1
 
 
