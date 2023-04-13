@@ -1,3 +1,4 @@
+#########################################################
 echo "Creating Resource groups & Vnets"
 az group create -l westus -n Red-RG
 
